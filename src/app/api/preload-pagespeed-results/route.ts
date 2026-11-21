@@ -80,7 +80,8 @@ export const GET = async () => {
     );
   }
 
-  // preload all the pages with a 500ms delay between each
+  // The shared Google API request pace applies to this batch and dashboard
+  // requests alike.
   //
   // allSettled, not all: PageSpeed Insights fails on individual pages that
   // Lighthouse cannot get through ("Lighthouse returned error: Something went
@@ -90,10 +91,8 @@ export const GET = async () => {
   // that throws never gets a row written, so it stayed in the candidate set and
   // poisoned every subsequent run.
   const results = await Promise.allSettled(
-    pageUrlsWithStrategyToFetch.map((page, index) =>
-      new Promise((resolve) => setTimeout(resolve, 500 * index)).then(() =>
-        getPageSpeedData(page.url, page.strategy)
-      )
+    pageUrlsWithStrategyToFetch.map((page) =>
+      getPageSpeedData(page.url, page.strategy)
     )
   );
 
