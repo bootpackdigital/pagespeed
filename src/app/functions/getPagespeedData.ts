@@ -1,6 +1,24 @@
 import { db } from "@/db";
 import { pagesTable } from "@/db/schema";
 
+declare global {
+  var __pageSpeedNextRequestAt: number | undefined;
+}
+
+// Next builds the preload and dashboard routes separately. Keep their Google
+// API reservations on the process global so both routes share one pace.
+const REQUEST_INTERVAL_MS = 2_000;
+
+async function waitForRequestSlot() {
+  const now = Date.now();
+  const requestAt = Math.max(now, globalThis.__pageSpeedNextRequestAt ?? now);
+  globalThis.__pageSpeedNextRequestAt = requestAt + REQUEST_INTERVAL_MS;
+
+  if (requestAt > now) {
+    await new Promise<void>((resolve) => setTimeout(resolve, requestAt - now));
+  }
+}
+
 export async function getPageSpeedData(
   url: string,
   strategy: "mobile" | "desktop" = "mobile"
@@ -15,6 +33,8 @@ export async function getPageSpeedData(
   urlObject.searchParams.append("category", "best-practices");
   urlObject.searchParams.append("category", "seo");
   urlObject.searchParams.append("strategy", strategy);
+
+  await waitForRequestSlot();
 
   const res = await fetch(urlObject.toString(), {
     headers: {
