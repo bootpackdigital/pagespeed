@@ -39,6 +39,7 @@ export const dashboards = {
       "theravenspace",
       "utahmountainadventures",
       "wasatchblade",
+      "willowcreekcompanies",
     ] satisfies (keyof typeof sites)[],
   },
   nef: {

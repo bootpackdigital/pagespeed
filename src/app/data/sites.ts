@@ -333,6 +333,24 @@ export const sites = {
     paths: ["/", "/events", "/locations", "/contact"],
     title: "whattodoinsaltlake.com",
   },
+  willowcreekcompanies: {
+    baseUrl: "https://www.willowcreekcompanies.com",
+    paths: [
+      "/",
+      "/four-pillars-safety/",
+      "/services/",
+      "/services/pipeline-construction/",
+      "/services/facility-construction/",
+      "/services/electrical-instrumentation/",
+      "/services/fabrication/",
+      "/services/power-services/",
+      "/services/renewable-natural-gas/",
+      "/social-responsibility/",
+      "/employment/",
+      "/contact/",
+    ],
+    title: "willowcreekcompanies.com",
+  },
 };
 
 export const getSiteData = (site: keyof typeof sites) => {
